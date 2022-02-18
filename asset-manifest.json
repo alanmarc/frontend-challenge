@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/alanmarc/frontend-challenge/static/js/main.bb0c082d.js",
+    "index.html": "/alanmarc/frontend-challenge/index.html",
+    "main.bb0c082d.js.map": "/alanmarc/frontend-challenge/static/js/main.bb0c082d.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bb0c082d.js"
+  ]
+}
