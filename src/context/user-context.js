@@ -1,5 +1,8 @@
-import { createContext, useState, useLayoutEffect } from "react";
+import { useQuery } from "@apollo/client";
+import { createContext, useState, useLayoutEffect, useEffect } from "react";
 import useInputValue from '../hooks/use-input-value';
+import { GET_USERS } from '../graphql/queries';
+
 
 const months = [
   'Enero',
@@ -31,11 +34,11 @@ function getInitialState(key) {
 
 function UserProvider({ children }) {
   const [users, setUsers] = useState([])
-  const addUser = (newUser = {}) => {
-    const newUserList = [...users, newUser]
-    setUsers(newUserList)
-    sessionStorage.setItem('usersList', JSON.stringify(newUserList));
-  }
+  const addUser = (newUser = {}) => setUsers([...users, newUser])
+    //const newUserList = [...users, newUser]//Aquise cambia 
+    //setUsers(newUserList)
+    //sessionStorage.setItem('usersList', JSON.stringify(newUserList));
+  
   const [UIstep, setUIStep] = useState(checkStep())
   const handleStep = (value = 0) => {
     sessionStorage.setItem('UIstep', value)
@@ -52,6 +55,14 @@ function UserProvider({ children }) {
   const phone = useInputValue(getInitialState('phone'))
   const fullName = `${name.value} ${secondName.value} ${lastName.value} ${secondLastName.value}`;
   const birthDay = `${day.value} de ${months[month.value < 12 ? month.value - 1 : 11]} ${year.value}`
+
+  const { data } = useQuery(GET_USERS)//Agrego
+  useEffect(() => {
+    if(data?.getAllUsers) {
+      setUsers(data.getAllUsers)
+    }
+  }, [data])
+
   const isDisabledNextBtn = () => {
     switch(UIstep) {
       case 0:
@@ -64,7 +75,8 @@ function UserProvider({ children }) {
         return true;
     }
   }
-  const handleSubmit = () => {
+  
+  /*const handleSubmit = () => {
     if (!email.value && !phone.value) return
     addUser({
       id: Math.random().toString(36).slice(2),
@@ -89,7 +101,8 @@ function UserProvider({ children }) {
       setUIStep(0);
     }, 100)
   }
-
+*/
+/*
   useLayoutEffect(() => {
     const userList = JSON.parse(getInitialState('usersList') || '[]');
     console.log(userList);
@@ -97,7 +110,7 @@ function UserProvider({ children }) {
       setUsers(userList);
     }
   }, [])
-
+*/
   return (
     <UserContext.Provider value={{
       UIstep,
@@ -112,10 +125,10 @@ function UserProvider({ children }) {
       email,
       phone,
       users,
-      handleSubmit,
       fullName,
       birthDay,
       isDisabledNextBtn,
+      addUser
     }}>
       {children}
     </UserContext.Provider>

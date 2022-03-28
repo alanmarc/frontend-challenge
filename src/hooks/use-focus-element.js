@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 function useFocusElement(intialState) {
   const [isFocus, setIsFocus] = useState(intialState)
@@ -15,4 +15,4 @@ function useFocusElement(intialState) {
   }
 }
 
-export default useFocusElement
+export default useFocusElement;

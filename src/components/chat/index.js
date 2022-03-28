@@ -1,5 +1,7 @@
 import { TransitionGroup, Transition } from 'react-transition-group';
 import { useContext } from 'react';
+import { CREATE_USER } from '../../graphql/mutations';
+import { useMutation } from '@apollo/client';
 import Header from './header';
 import FormName from '../forms/names';
 import FormDate from '../forms/date';
@@ -18,16 +20,22 @@ const forms = [
 ]
 
 function Chat() {
+  const [createUser] = useMutation(CREATE_USER)
   const {
     UIstep,
     handleStep,
+    name,
+    secondName,
+    lastName,
+    secondLastName,
     email,
     phone,
-    handleSubmit,
     fullName,
     birthDay,
     isDisabledNextBtn,
+    addUser
   } = useContext(UserContext);
+
   const handleNextForm = () => {
     if (UIstep < 2) {
       handleStep(UIstep + 1)
@@ -35,6 +43,25 @@ function Chat() {
   };
   const handleGoBack = () => {
     if(UIstep !== 0) handleStep(UIstep - 1)
+  };
+
+  const handleSubmit = () => {
+      createUser({
+        variables: {
+          name: name.value,
+          secondName: secondName.value,
+          lastName: lastName.value,
+          secondLastName: secondLastName.value,
+          email: email.value,
+          phone: phone.value,
+          birthday: birthDay,
+        }
+      }).then(({ data }) => {
+        addUser(data.createUser)
+        console.log(data);
+      }).catch(console.log)
+    
+    
   }
   const formInfo = {
     0: <p>Nombre: {fullName}</p>,
@@ -58,6 +85,8 @@ function Chat() {
     exiting: { opacity: 0.5, display: 'none', transform: 'translateY(-160px)' },
     exited: { opacity: 0, transform: 'translateY(-380px)' },
   };
+
+  
   return (
     <div style={{ width: '100%' }}>
       <Header step={UIstep} />

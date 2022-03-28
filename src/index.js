@@ -3,6 +3,28 @@ import ReactDOM from 'react-dom'
 import Home from './App'
 import BaseStyles from './components/global-styled'
 import UserProvider from './context/user-context'
+import { onError } from '@apollo/client/link/error'
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client'
+
+
+const errorLink = onError(({ graphqlErrors, networkError }) => {
+  if(graphqlErrors) {
+    graphqlErrors.map(({ message, location, path }) => {
+      return alert(`Graphql error ${message}`)
+    })
+  }
+})
+
+const link = from([
+  errorLink,
+  new HttpLink({ uri: "https://user-graph.herokuapp.com/graphql" })
+])
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link
+})
+
 
 
 ReactDOM.render(
@@ -14,9 +36,11 @@ ReactDOM.render(
 
 function App() {
   return (
+    <ApolloProvider client={client}>
       <UserProvider>
         <BaseStyles theme={{}} />
         <Home />
       </UserProvider>
+    </ApolloProvider>
   )
 }

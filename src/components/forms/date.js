@@ -1,7 +1,7 @@
 import TextField from '../common/textfield';
 import { FormContainerStyled } from './styles';
-import { UserContext } from '../../context/user-context'
-import { useContext } from 'react'
+import { UserContext } from '../../context/user-context';
+import { useContext } from 'react';
 
 function FormDate(props) {
   const { day, month, year } = useContext(UserContext)

@@ -65,7 +65,7 @@ function UserList() {
         <TransitionGroup component="section">
           {users
             .slice()
-            .reverse()
+            .reverse()//probable cambio
             .map((user) => (
               <CSSTransition key={user.id} classNames="user">
                 <User user={user} />

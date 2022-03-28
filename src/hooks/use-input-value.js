@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 function useInputValue(initialState = '') {
   const [value, setValue] = useState(initialState)
@@ -11,4 +11,4 @@ function useInputValue(initialState = '') {
   return { value, onChange, clean }
 }
 
-export default useInputValue
+export default useInputValue;
